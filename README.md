@@ -22,7 +22,8 @@
 By default, the provided training scripts assume that two gpus are available, with indices 0,1. Training on two gpus takes around 9 hours. Any NVIDIA GPU with 8GB or larger memory should be OK. Training scripts and prototxt files will require minor modifications to train on a single gpu (e.g. set `iter_size` to 2).
 
 ### Installation
-
+You can follow the installing steps base on https://chunml.github.io/ChunML.github.io/project/Installing-Caffe-Ubuntu/
+But remember using this caffe version(contain Faster-RCNN)
 All instructions are from the top level directory. To run the demo, should be only steps 1-4 required (remaining steps are for training a model).
 
 1.  Clone the Up-Down-Captioner repository:
@@ -74,63 +75,27 @@ All instructions are from the top level directory. To run the demo, should be on
     cd $REPO_ROOT
     python scripts/preprocess_coco.py
     ``` 
-    
-8.  Download or generate pretrained image features following the instructions below.
 
 
-### Pretrained image features
+### Usage
 
-**LINKS HAVE BEEN UPDATED**
+1. `scripts/generate_baseline_mine.py`
+    To extract image features, run above python script with following arguments:
+      --image_folder, path to the folder contain image 
+      --output_file, path to the .tsv file you want to save image features.
+    Example
+    ```
+    python scripts/generate_baseline_mine.py --image_folder data/images/coco_train/ --output_file data/features/train.tsv
+    ```
 
-The captioner takes pretrained image features as input (and does not finetune). For best performance, bottom-up attention features should be used. Code for generating these features can be found [here](https://github.com/peteanderson80/bottom-up-attention). For ease-of-use, we provide pretrained features for the [MSCOCO dataset](http://mscoco.org/dataset/#download). Manually download the following tsv file and unzip to `data/tsv/`:
-- [2014 Train/Val Image Features (120K / 23GB)](https://imagecaption.blob.core.windows.net/imagecaption/trainval.zip)
-
-To make a test server submission, you would also need these features:
-- [2014 Testing Image Features (40K / 7.3GB)](https://imagecaption.blob.core.windows.net/imagecaption/test2014.zip)
-
-Alternatively, to generate conventional pretrained features from the ResNet-101 CNN:
-- Download the [pretrained ResNet-101 model](https://github.com/KaimingHe/deep-residual-networks#models) and save it in `baseline/ResNet-101-model.caffemodel`
-- Download the MS COCO train/val images, and extract them into `data/images`.
-- Run:
-```Shell
-cd $REPO_ROOT
-./scripts/generate_baseline.py
-``` 
-
-### Training
-
-To train the model on the karpathy training set, and then generate and evaluate captions on the karpathy testing set (using bottom-up attention features): 
-```Shell
-cd $REPO_ROOT
-./experiments/caption_lstm/train.sh
-```
-
-Trained snapshots are saved under: `snapshots/caption_lstm/`
-
-Logging outputs are saved under: `logs/caption_lstm/`
-
-Generated caption outputs are saved under: `outputs/caption_lstm/`
-
-Scores for the generated captions (on the karpathy test set) are saved under: `scores/caption_lstm/`
-
-To train and evaluate the baseline using conventional pretrained features, follow the instructions above but replace `caption_lstm` with `caption_lstm_baseline_resnet`.
-
-### Results
-
-Results (using bottom-up attention features) should be similar to the numbers below (as reported in Table 1 of the paper).
-
-|                   | BLEU-1  | BLEU-4  | METEOR  | ROUGE-L |  CIDEr  |  SPICE  |
-|-------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|Cross-Entropy Loss |  77.2   |  36.2   |  27.0   |  56.4   |  113.5  |  20.3   |
-|CIDEr Optimization |  79.8   |  36.3   |  27.7   |  56.9   |  120.1  |  21.4   |
-
-### Other useful scripts
-
-1. `scripts/create_caption_lstm.py`
-    The version of caffe provided as a submodule with this repo includes (amongst other things) a custom `LSTMNode` layer that enables sampling and beam search through LSTM layers. However, the resulting network architecture prototxt files are quite complicated. The file `scripts/create_caption_lstm.py` scaffolds out network structures, such as those in `experiments`.
-
-2. `layers/efficient_rcnn_layers.py`
-    The provided `net.prototxt` file uses a python data layer (`layers/rcnn_layers.py`) that loads all training data (including image features) into memory. If you have insufficient system memory use this python data layer instead, by replacing `module: "rcnn_layers"` with `module: "efficient_rcnn_layers"` in `experiments/caption_lstm/net.prototxt`.
-
-3. `scripts/plot.py`
-    Basic script for plotting validation set scores during training.
+2. In the case GPU out of memory, change the following code line:
+   Reduce max number boxes proposal
+   ```
+   fg['TEST']['RPN_POST_NMS_TOP_N'] = 150  # Previously 300 for evaluations reported in the paper
+   ```
+   Decrease max boxes
+   ```
+   MIN_BOXES = 10
+   MAX_BOXES = 100
+   ```
+3. Enjoy your awnsome features.
