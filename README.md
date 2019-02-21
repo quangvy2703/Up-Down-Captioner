@@ -1,22 +1,4 @@
-# Up-Down-Captioner
-
-Simple yet high-performing image captioning model using Caffe and python. Using image features from [bottom-up attention](https://github.com/peteanderson80/bottom-up-attention), in July 2017 this model achieved state-of-the-art performance on all metrics of the [COCO captions test leaderboard](http://cocodataset.org/#captions-leaderboard) (**SPICE 21.5**, **CIDEr 117.9**, **BLEU_4 36.9**). The architecture (2-layer LSTM with attention) is described in Section 3.2 of:
-- [Bottom-Up and Top-Down Attention for Image Captioning and Visual Question Answering](https://arxiv.org/abs/1707.07998). 
-
-### Reference
-If you use this code in your research, please cite our paper:
-```
-@inproceedings{Anderson2017up-down,
-  author = {Peter Anderson and Xiaodong He and Chris Buehler and Damien Teney and Mark Johnson and Stephen Gould and Lei Zhang},
-  title = {Bottom-Up and Top-Down Attention for Image Captioning and Visual Question Answering},
-  booktitle={CVPR},
-  year = {2018}
-}
-```
-
-### License
-
-This code is released under the MIT License (refer to the LICENSE file for details).
+# Extracting image features with Faster-RCNN
 
 ### Requirements: software
 
@@ -39,11 +21,6 @@ This code is released under the MIT License (refer to the LICENSE file for detai
 
 By default, the provided training scripts assume that two gpus are available, with indices 0,1. Training on two gpus takes around 9 hours. Any NVIDIA GPU with 8GB or larger memory should be OK. Training scripts and prototxt files will require minor modifications to train on a single gpu (e.g. set `iter_size` to 2).
 
-
-### Demo - Using the model to predict on new images
-
-Run install instructions 1-4 below, then use the notebook at `scripts/demo.ipynb`
-
 ### Installation
 
 All instructions are from the top level directory. To run the demo, should be only steps 1-4 required (remaining steps are for training a model).
@@ -51,7 +28,7 @@ All instructions are from the top level directory. To run the demo, should be on
 1.  Clone the Up-Down-Captioner repository:
     ```Shell
     # Make sure to clone with --recursive
-    git clone --recursive https://github.com/peteanderson80/Up-Down-Captioner.git
+    git clone --recursive https://github.com/quangvy2703/Up-Down-Captioner.git
     ```
 
     If you forget to clone with the `--recursive` flag, then you'll need to manually clone the submodules:
