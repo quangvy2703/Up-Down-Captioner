@@ -22,8 +22,8 @@
 By default, the provided training scripts assume that two gpus are available, with indices 0,1. Training on two gpus takes around 9 hours. Any NVIDIA GPU with 8GB or larger memory should be OK. Training scripts and prototxt files will require minor modifications to train on a single gpu (e.g. set `iter_size` to 2).
 
 ### Installation
-You can follow the installing steps base on https://chunml.github.io/ChunML.github.io/project/Installing-Caffe-Ubuntu/
-But remember using this caffe version(contain Faster-RCNN)
+You can follow the installing steps base on https://chunml.github.io/ChunML.github.io/project/Installing-Caffe-Ubuntu/.
+But remember using caffe version on this repo.
 All instructions are from the top level directory. To run the demo, should be only steps 1-4 required (remaining steps are for training a model).
 
 1.  Clone the Up-Down-Captioner repository:
